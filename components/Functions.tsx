@@ -28,7 +28,6 @@ export const setupPlayer = async () => {
 
     const state = await TrackPlayer.getState();
     if (state === State.Playing) {
-        console.log('The player is playing');
     };
     
     try {

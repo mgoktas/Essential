@@ -7,24 +7,21 @@ export class User extends Realm.Object<User> {
   useremail!: string;
   userpassword!: string;
   username!: string;
-  dailyReminder: boolean = false;
-  ranking: boolean = false;
-  darkMode: boolean = false;
-  autoBreak: boolean = false;
-  autoNext: boolean = false;
-  vibrate: boolean = false;
-  premium: boolean = false;
   alarmWork: number = 1;
-  alarmBreak: number = 2;
+  alarmBreak: number = 2; 
+  vibrate: string = 'false';
   pomodoroLength: number = 25;
   breakShortLength: number = 5;
   breakLongLength: number = 15;
-  breakAfterLongLength: number = 25;
-  breakAfter: number = 4;
-  defaultDoroStr: string = 'monkdoro';
+  breakAfterLongLength: number = 4;
+  autoNext: string = 'false';
+  autoBreak: string = 'false';
+  darkMode: string = 'false'; 
+  dailyReminder: string = 'false';
   defaultDoroInt: number = 1;
-  avatarType: number = 0;
-
+  defaultDoroStr: string = 'Monkdoro';
+  isPremium: string = 'false';
+  
   static schema = {
     name: 'User',
     properties: {
@@ -32,23 +29,20 @@ export class User extends Realm.Object<User> {
       useremail: 'string',
       userpassword: 'string',
       username: 'string',
-      dailyReminder: {type: 'bool', default: false},
-      ranking: {type: 'bool', default: false},
-      darkMode: {type: 'bool', default: false},
-      autoBreak: {type: 'bool', default: false},
-      autoNext: {type: 'bool', default: false},
-      vibrate: {type: 'bool', default: false},
-      premium: {type: 'bool', default: false},
       alarmWork: {type: 'int', default: 1},
       alarmBreak: {type: 'int', default: 2},
+      vibrate: {type: 'string', default: 'false'},
       pomodoroLength: {type: 'int', default: 25},
       breakShortLength: {type: 'int', default: 5},
       breakLongLength: {type: 'int', default: 15},
-      breakAfterLongLength: {type: 'int', default: 25},
-      breakAfter: {type: 'int', default: 4},
-      defaultDoroStr: {type: 'string', default: 'monkdoro'},
+      breakAfterLongLength: {type: 'int', default: 4},
+      autoNext: {type: 'string', default: 'false'},
+      autoBreak: {type: 'string', default: 'false'},
+      darkMode: {type: 'string', default: 'false'},
+      dailyReminder: {type: 'string', default: 'false'},
       defaultDoroInt: {type: 'int', default: 1},
-      avatarType: {type: 'int', default: 0},
+      defaultDoroStr: {type: 'string', default: 'Monkdoro'},
+      isPremium: {type: 'string', default: 'false'},
     },
     primaryKey: '_id',
   };
@@ -112,15 +106,17 @@ export class Task extends Realm.Object<Doro> {
 
 export const realmUserConfig: Realm.Configuration = {
   schema: [User, Doro, Task],
-  schemaVersion: 12
+  schemaVersion: 15
 };
 
-const {RealmProvider, useRealm, useObject, useQuery} = 
-createRealmContext(realmUserConfig);
+// export const {RealmProvider, useRealm, useObject, useQuery} = 
+// createRealmContext(realmUserConfig);
 
-export const UserRealmContext = createRealmContext({
-  schema: [User, Doro, Task],
-  schemaVersion: 12
-})
+//  const UserRealmContext = createRealmContext({
+//   schema: [User, Doro, Task],
+//   schemaVersion: 15
+// })
 
+const realmContext = createRealmContext(realmUserConfig);
 
+export const useRealmContext = () => realmContext;

@@ -195,13 +195,6 @@ const Tasks = ({navigation, route}) => {
         const firstDay = new Date(today3.setDate(today3.getDate() - today3.getDay()));
         const lastDay = new Date(today3.setDate(today3.getDate() - today3.getDay() + 6));
 
-        console.log(today.getDate())
-        console.log(today2.getMonth())
-
-        console.log(date.getDate())
-        console.log(date.getMonth())
-        
-
         const dayName = date.toLocaleString('default', { month: 'long' })
         
         if(date.getFullYear() > today.getFullYear()) {
@@ -266,10 +259,8 @@ const Tasks = ({navigation, route}) => {
               realm.delete(Taskk);
             });
 
-            console.log(items)
 
             items.map((item) => {
-                console.log(item._id)
             })
 
             setItems(items.filter(item => `${item._id}` !== `${selectedId}`));

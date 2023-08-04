@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { User, UserRealmContext } from '../../../components/Storage/MongoDB';
-import { ChangeWText, Header, HeaderButton, HeaderButtonRight, ProfileWText, SettingsCellwText, styles } from '../../../components/Utilities';
+import { ChangeWText, Header, HeaderButtonRight, styles } from '../../../components/Utilities/Utilities';
 
 const Change = ({route, navigation}) => {
 

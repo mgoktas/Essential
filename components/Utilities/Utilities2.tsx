@@ -32,7 +32,7 @@ export const Input = ({onChangeText, icon, placeholder, isPassword, autoCap, isD
                 <Icon name={icon} style={[styles.icon, {left: isPassword ? .7 : 0}]} size={20}/>
             </View>
 
-            <TextInput autoCapitalize={autoCap} secureTextEntry={isPassword} onChangeText={onChangeText} placeholder={placeholder}  placeholderTextColor={'#6B6B6B'} style={styles.textInput}>
+            <TextInput autoCapitalize={autoCap} secureTextEntry={isPassword} onChangeText={onChangeText} placeholder={placeholder}  placeholderTextColor={'#6B6B6B'} style={[styles.textInput,{color: isDarkModeOn ? 'white' : 'black'}]}>
                 
             </TextInput>
         </View>

@@ -67,13 +67,6 @@ export const getDate = (date: Date) => {
     const firstDay = new Date(today3.setDate(today3.getDate() - today3.getDay()));
     const lastDay = new Date(today3.setDate(today3.getDate() - today3.getDay() + 6));
 
-    console.log(today.getDate())
-    console.log(today2.getMonth())
-
-    console.log(date.getDate())
-    console.log(date.getMonth())
-    
-
     const dayName = date.toLocaleString('default', { month: 'long' })
     
     if(date.getFullYear() > today.getFullYear()) {

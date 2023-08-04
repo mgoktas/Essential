@@ -13,6 +13,7 @@ import { StripeProvider } from '@stripe/stripe-react-native';
 // import { OfferSheet, OfferSheetRefProps } from '../components/OfferSheet';
 import { scrollTo } from 'react-native-reanimated';
 import { useApp } from '@realm/react';
+import { getDataString } from './components/Storage/Data';
 // import PaymentScreen from '../components/Functions/Stripe/Stripe';
 // import { BottomSheet, BottomSheetRefProps } from '../components/BottomSheetPayment';
 
@@ -32,6 +33,7 @@ const Settings = ({route, navigation}) => {
     const [isLongBreakSelected, setIsLongBreakSelected] = useState(false)
     const [isAfterLongBreakSelected, setIsAfterLongBreakSelected] = useState(false)
     const [isDefaultDoroSelected, setIsDefaultDoroSelected] = useState(false)
+    const [name, setName] = useState(getDataString('name'))
 
     // const {useRealm, useQuery, useObject} = UserRealmContext;
     // const realm = useRealm()
@@ -79,7 +81,6 @@ const Settings = ({route, navigation}) => {
         }, 200);
 
         const myItem: any = await getItem2('dailyReminderr')
-        console.log(await JSON.parse(myItem))
 
     }
 
@@ -169,9 +170,6 @@ const Settings = ({route, navigation}) => {
     };
 
     const onSelectName = (data) => {
-        setInfo({ ...info, 
-            name: data})
-            }
     
             //    value, index) => {
 
@@ -488,7 +486,6 @@ const Settings = ({route, navigation}) => {
                         defaultDoroStr: value2
                     }
 
-                    console.log(updatedValue)
 
                     setInfo(obj => ({
                         ...obj,
@@ -515,7 +512,6 @@ const Settings = ({route, navigation}) => {
         updatedValue ={
             vibrate: !value
         }
-        console.log(updatedValue)
                     setInfo(obj => ({
                         ...obj,
                         ...updatedValue

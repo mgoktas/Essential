@@ -8,36 +8,31 @@ import { ButtonSheet, ButtonSheetRefProps, ConfirmSheet, ConfirmSheetRefProps } 
 // import { User, UserRealmContext } from '../../components/Storage/MongoDB';
 import { CellUpperText, Header, HeaderButton, LineBwCell, ProfileWText, SCREEN_HEIGHT, SettingsCell, SettingsCellProfile, SettingsCellwText, Space, styles } from '../../components/Utilities/Utilities';
 import { AvatarLogo } from '../../components/Utilities/Utilities3';
+import { getDataString, setData } from '../../components/Storage/Data';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Profile = ({route, navigation}) => {
 
-    const { onSelectName, selectedName, email, isDarkModeOn } = route.params;
-    const [newName, setNewName] = useState(selectedName)
+    const { onSelectName, email, isDarkModeOn } = route.params;
+    const [newName, setNewName] = useState(getDataString('name'))
     const [isSheetOn, setIsSheetOn] = useState(false)
     const [logordelete, setLogordelete] = useState(0)
-
-    // const {useRealm, useQuery, useObject} = UserRealmContext;
-    // const realm = useRealm()
-    // const MyObject = useObject(User, 1);
-    // const userAccount = useQuery(User)
+    const [name, setName] = useState(getDataString('name'))
 
     const app = useApp()
 
     const logout = async () => {
 
+        setData('isLogged', 'false')
         try {
             await app.currentUser?.logOut();
-            await AsyncStorage.setItem('isLogged', 'false')
-            navigation.navigate('Focus')
+            await navigation.navigate('Focus')
         }
         catch (err) {
             console.log(err)
         }
 
     }
-
-    console.log(isDarkModeOn)
-
 
     const deleteAccount = async () => {
 
@@ -51,6 +46,13 @@ const Profile = ({route, navigation}) => {
     }
 
     StatusBar.setBarStyle('light-content', true);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            setName(getDataString('name'))
+            setNewName(getDataString('name'))
+        }, [])
+      );
 
     const ref = useRef<ButtonSheetRefProps>(null)
     const ref2 = useRef<ConfirmSheetRefProps>(null)
@@ -82,7 +84,7 @@ const Profile = ({route, navigation}) => {
     }
 
     const openLogoutSheet = useCallback(() => {
-        ref2?.current?.scrollTo(-20)
+        ref2?.current?.scrollTo(-40)
     }, [])
 
     const closeLogoutSheet =async ()=>{
@@ -95,8 +97,6 @@ const Profile = ({route, navigation}) => {
         }, 200);
 
     }
-    console.log(isDarkModeOn, 'isDarkModeOn')
-
     return  (
     <SafeAreaView style={[styles.pageProfile, {backgroundColor: isDarkModeOn ? 'black' : '#f2f2f6'}]}>
               <StatusBar
@@ -120,13 +120,13 @@ const Profile = ({route, navigation}) => {
 
                     <View>
 
-                        <AvatarLogo isDarkModeOn={isDarkModeOn} isSheetOn={isSheetOn} fullname={selectedName} email={email} avatar={'#A0A6BE'} onPress={() => {openSheet(); setIsSheetOn(true)}} /> 
+                        <AvatarLogo isDarkModeOn={isDarkModeOn} isSheetOn={isSheetOn} fullname={name} email={email} avatar={'#A0A6BE'} onPress={() => {openSheet(); setIsSheetOn(true)}} /> 
 
-                        <ProfileWText isDarkModeOn={isDarkModeOn} isSheetOn={isSheetOn}  onPress={() => {navigation.navigate('ChangeName', { onSelectName: onSelectName, name: selectedName, changeName: setNewName, isDarkModeOn: isDarkModeOn })}} iconArrow={'angle-right'} value={newName} title={'Name'} isFirst={true}/>
+                        <ProfileWText isDarkModeOn={isDarkModeOn} isSheetOn={isSheetOn}  onPress={() => {navigation.navigate('ChangeName', { onSelectName: onSelectName, name: name, changeName: setNewName, isDarkModeOn: isDarkModeOn })}} iconArrow={'angle-right'} value={newName} title={'Name'} isFirst={true}/>
                         <LineBwCell />
-                        <ProfileWText isDarkModeOn={isDarkModeOn} isSheetOn={isSheetOn}  onPress={() => {navigation.navigate('ChangePassword', { onSelectName: onSelectName, name: selectedName, changeName: setNewName, isDarkModeOn: isDarkModeOn, email: email})}} iconArrow={'angle-right'} value={null} title={'Password & Security'} isLast={false}/>
+                        <ProfileWText isDarkModeOn={isDarkModeOn} isSheetOn={isSheetOn}  onPress={() => {navigation.navigate('ChangePassword', { onSelectName: onSelectName, name: name, changeName: setNewName, isDarkModeOn: isDarkModeOn, email: email})}} iconArrow={'angle-right'} value={null} title={'Password & Security'} isLast={false}/>
                         <LineBwCell />
-                        <ProfileWText isDarkModeOn={isDarkModeOn} isSheetOn={isSheetOn}  onPress={() => {navigation.navigate('Subs', { onSelectName: onSelectName, name: selectedName, changeName: setNewName })}} iconArrow={'angle-right'} value={null} title={'Subscriptions'} isLast={true}/>
+                        <ProfileWText isDarkModeOn={isDarkModeOn} isSheetOn={isSheetOn}  onPress={() => {navigation.navigate('Subs', { onSelectName: onSelectName, name: name, changeName: setNewName })}} iconArrow={'angle-right'} value={null} title={'Subscriptions'} isLast={true}/>
                         
                         <Space space={5}/>
 
@@ -150,3 +150,4 @@ const Profile = ({route, navigation}) => {
 )}
 
 export default Profile;
+ 

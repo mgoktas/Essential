@@ -107,9 +107,23 @@ export const FocusButtonPause = ({isAction, isAction2, onPress1, onPress2}) => {
     )
 }
 
-export const Header = ({title, color, onPress, isSubtle, opacity, isBorderOk, isSheetOn, isWriting, isOnChange, isDarkModeOn, onPress2, isOnTask, isAddOn, isAddOn0}) => {
+export const Header = ({mode, title, color, onPress, isSubtle, opacity, isBorderOk, isSheetOn, isWriting, isOnChange, isDarkModeOn, onPress2, isOnTask, isAddOn, isAddOn0}) => {
+
+
     return (
-        <View style={[styles.header, {backgroundColor: color, opacity: isSheetOn ? .7 : 1, borderBottomColor: 'black', borderBottomWidth: isBorderOk ? .7 : 0}]}>
+
+        mode === 'pwc'  ?
+    <View style={[styles.header, {backgroundColor: color, opacity: isSheetOn ? .7 : 1, borderBottomColor: 'black', borderBottomWidth: isBorderOk ? .7 : 0}]}>
+        <Text style={[styles.haederText2, {opacity: opacity, color: isSheetOn ? 'gray' : isDarkModeOn ? 'white' : 'black'}]}>{title}</Text>
+        <TouchableOpacity activeOpacity={isSheetOn ? .5 : .4} onPress={isSheetOn ? ()=>{} : onPress} style={[styles.headerIconCnt, {opacity: isSheetOn ? .5 : 1, zIndex: isSubtle || isSheetOn ? 0 : 1, }]}>
+          <Icon name={'arrow-back'} size={25} color={isSheetOn ? 'gray' : '#007AFF' }/>
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={!isOnChange ? 0 : .6} onPress={onPress2} style={[styles.headerIconCnt2, {right: 30, display: isWriting? 'flex' : 'none'}]}>
+              <Icon2 name={isOnTask && !isAddOn ? 'plus' : 'check'} size={24} color={isSheetOn && isOnTask ? 'gray' : isOnTask && !isAddOn ? '#f48c06' : '#007AFF'}/>
+          </TouchableOpacity>
+    </View>
+        :
+    <View style={[styles.header, {backgroundColor: color, opacity: isSheetOn ? .7 : 1, borderBottomColor: 'black', borderBottomWidth: isBorderOk ? .7 : 0}]}>
           <Text style={[styles.haederText2, {opacity: opacity, color: isSheetOn ? 'gray' : isDarkModeOn ? 'white' : 'black'}]}>{title}</Text>
           <TouchableOpacity activeOpacity={isSheetOn ? .5 : .4} onPress={isSheetOn ? ()=>{} : onPress} style={[styles.headerIconCnt, {opacity: isSheetOn ? .5 : 1, zIndex: isSubtle || isSheetOn ? 0 : 1, }]}>
             <Icon name={'arrow-back'} size={25} color={isSheetOn ? 'gray' : '#007AFF' }/>
@@ -119,7 +133,8 @@ export const Header = ({title, color, onPress, isSubtle, opacity, isBorderOk, is
                 <Icon2 name={isOnTask && !isAddOn ? 'plus' : 'check'} size={24} color={isSheetOn && isOnTask ? 'gray' : isOnTask && !isAddOn ? '#f48c06' : '#007AFF'}/>
             </TouchableOpacity>
             </View>
-        </View>)
+    </View>
+        )
 }
 
 export const HeaderButton = ({title, color, onPress, isSubtle}) => {

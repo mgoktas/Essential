@@ -11,7 +11,7 @@ import { SheetTitle, BackButton, FeaturesBox, SubsBox, AppleButton, BottomTexts,
 import { LineBwCell, Space, TaskCnt, TaskCntCnt, WhatDay } from './Utilities/Utilities';
 import { privacypolicy, termsofservice } from './Storage/Data';
 import { FlashList } from '@shopify/flash-list';
-import { Task, UserRealmContext } from './Storage/MongoDB';
+import { Task, useRealmContext,  } from './Storage/MongoDB';
 import { dates, getDate } from './Data';
 const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window')
 
@@ -87,7 +87,6 @@ export const OfferSheet = React.forwardRef<OfferSheetRefProps, BottomSheetProps>
 
 
     const measureView = (event) => {
-      console.log('event peroperties: ', event);
       // setState({
       //         x: event.nativeEvent.layout.x,
       //         y: event.nativeEvent.layout.y,
@@ -203,7 +202,6 @@ export const ButtonSheet = React.forwardRef<OfferSheetRefProps, BottomSheetProps
     
             await ImagePicker.launchCamera(optionsCamera,
             (response) => {
-              console.log(response);
             },
           )
   }
@@ -228,7 +226,6 @@ export const ButtonSheet = React.forwardRef<OfferSheetRefProps, BottomSheetProps
         maxWidth: 200,
       },
       (response) => {
-        console.log(response);
         
       },
     )
@@ -332,7 +329,7 @@ return (
           <Animated.View style={[styles.confirmSheet, rBottomSheetStyle, {backgroundColor: props.isDarkModeOn ? '#1c1c1e' : 'white'}]}>
             <View style={{justifyContent: 'center', flexDirection: 'column'}}>
             <Space space={5}/>
-            <ButtonWSheet isDarkModeOn={props.isDarkModeOn} onPress1={() => {scrollTo(100); props.closeSheet2()}} onPress2={() => {props.deleteTask(); scrollTo(100); props.closeSheet2(); logOrDelete(props.logordelete)}} btn1={'Cancel'} btn2={props.logordelete == 0 ? 'Sign Out' : props.logordelete == 2 ? 'Delete Task' :  'Delete Account'} />
+            <ButtonWSheet isDarkModeOn={props.isDarkModeOn} onPress1={() => {scrollTo(100); props.closeSheet2()}} onPress2={() => {scrollTo(100); props.closeSheet2(); logOrDelete(props.logordelete)}} btn1={'Cancel'} btn2={props.logordelete == 0 ? 'Sign Out' : props.logordelete == 2 ? 'Delete Task' :  'Delete Account'} />
             </View>
           </Animated.View>
         </GestureDetector>
@@ -356,11 +353,11 @@ export const TasksSheet = React.forwardRef<TasksSheetRefProps>( (props: ChildPro
   const translateY = useSharedValue(0)
   const MAX_TRANSLATE_Y = SCREEN_HEIGHT / 1.2
   
+  const {RealmProvider, useQuery, useRealm} = useRealmContext();
   
   const [isDate, setIsDate] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [items, setItems] = useState([])
-  const {useRealm, useQuery, useObject} = UserRealmContext;
   const allTasks = useQuery(Task)
   const realm = useRealm()
   const savedTasks = allTasks.filtered('isForFuture == true')
@@ -431,8 +428,6 @@ export const TasksSheet = React.forwardRef<TasksSheetRefProps>( (props: ChildPro
       const savedTasks = allTasks.filtered('isForFuture == true')
       savedTasks.map((item) => {
 
-        console.log(date, 'currentDate')
-        console.log(getDate(item.startDate), 'getDate(item.startDate)')
         if(getDate(item.startDate) == date) {
           setItems(arr => [...arr, {id: arr.length + 1, _id: item._id, name: item.taskName, date: getDate(item.startDate), didFinish: item.didFinish}])
           if(item){

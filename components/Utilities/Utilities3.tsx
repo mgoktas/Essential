@@ -6,7 +6,7 @@ import Icon3 from 'react-native-vector-icons/Entypo'
 import IconF from 'react-native-vector-icons/Feather'
 import { horizontalScale, verticalScale } from "../Metrics";
 import { LineBwCell, SCREEN_HEIGHT, SCREEN_WIDTH, Space } from "./Utilities";
-import { GestureHandlerRootView, TouchableHighlight } from "react-native-gesture-handler";
+import { GestureHandlerRootView, TouchableHighlight } from "react-native-gesture-handler"; 
 import { useCallback } from "react"
 import { termsofservice } from "../Storage/Data"
 
@@ -56,9 +56,9 @@ export const CardInfoCnt = () => {
     </View>
 )}
 
-export const CaretIcon = ({onPress, isLeft, isRight, icon, mode}) => {
+export const CaretIcon = ({onPress, icon, isTaskModeOn}) => {
     return (
-        <TouchableOpacity onPress={onPress} style={styles.caretIconCnt}>
+        <TouchableOpacity onPress={onPress} style={isTaskModeOn ? styles.caretIconCnt : styles.caretIconCnt2}>
             <Icon3 color='#007AFF' name={icon} size={32}/>
         </TouchableOpacity>        
     )
@@ -66,7 +66,7 @@ export const CaretIcon = ({onPress, isLeft, isRight, icon, mode}) => {
 
 export const CaretIcon2 = ({onPress, isTaskModeOn, isDoroModeOn}) => {
     return (
-        <TouchableOpacity onPress={onPress} style={styles.caretIconCnt2}>
+        <TouchableOpacity onPress={onPress} style={!isTaskModeOn ? styles.caretIconCnt : styles.caretIconCnt2}>
             <IconF color='#007AFF' name={'rotate-cw'} size={28}/>
         </TouchableOpacity>
     )

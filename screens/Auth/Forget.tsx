@@ -12,8 +12,6 @@ const Forget = ({route, navigation}) => {
     const [isDarkModeOn, setIsDarkModeOn] = useState(_dark)
     const [email, setEmail] = useState('')
 
-    console.log(isDarkModeOn)
-    
 
     return (
     <SafeAreaView style={[styles.pageSign, {backgroundColor: isDarkModeOn ? '#1c1c1e' : '#f2f2f6'}]}>

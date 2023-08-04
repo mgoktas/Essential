@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { BreakCell, LineBwCell, styles } from '../../components/Utilities';
-import { BackButton, BackButtonAbsolute } from '../../components/Utilities2';
-import { Header, SettingsCellwText } from '../../components/Utilities/Utilities';
+import { Header, SettingsCellwText, styles } from '../../components/Utilities/Utilities';
 import { Vibration, Platform } from "react-native";
 import { SetupPlayer, Vibrate } from '../../components/Functions';
 import TrackPlayer, { State } from 'react-native-track-player';
@@ -42,8 +40,6 @@ const AlarmBreak = ({navigation, route}) => {
         }
         }
 
-        console.log(isDarkModeOn)
-
     return (
         <SafeAreaView style={[styles.pageBreak, {backgroundColor: isDarkModeOn ? 'black' : '#f2f2f6'}]}>
             <Header 
@@ -77,7 +73,6 @@ const AlarmBreak = ({navigation, route}) => {
 
 
 
-                return <BreakCell isSelected={selectedId == item.id ? true : false} title={`Buzz ${item.id}`} onPress={() => {ring(item.id-1); setSelectedId(item.id)}}  />;
             }}
             estimatedItemSize={10}
             data={songs}

@@ -64,7 +64,7 @@ export const setData = (key, value) => {
     storage.set(keyIntitial, value)
 }
 
-export const getDataNumber = (key) => {
+export const getDataNumber = (key) => { 
     const keyIntitial = 'user.' + key
     const value = storage.getNumber(keyIntitial)
     return value

@@ -2,30 +2,38 @@ import { useApp } from '@realm/react';
 import React, { useState } from 'react';
 import { Alert, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { User, UserRealmContext } from '../../../components/Storage/MongoDB';
+import { User, UserRealmContext, useRealmContext } from '../../../components/Storage/MongoDB';
 // import { User, UserRealmContext } from '../../../components/Storage/MongoDB';
 import { AppleInput, ChangeWText, Header, HeaderButtonRight, Space, styles } from '../../../components/Utilities/Utilities';
+import { getDataString } from '../../../components/Storage/Data';
 
 const ChangePasswordChange = ({route, navigation}) => {
     const [isWriting, setIsWriting] = useState(false)
 
-    const [oldPassword, setOldPassword] = useState()
-    const [password, setNewPassword1] = useState('12345')
-    const [newPassword2, setNewPassword2] = useState('12345')
+    const [oldPassword, setOldPassword] = useState('')
+    const [newPassword1, setNewPassword1] = useState('')
+    const [newPassword2, setNewPassword2] = useState('')
+    const blank = ''
 
     const {isDarkModeOn, email} = route.params
-    
-    const {useRealm, useQuery, useObject} = UserRealmContext;
-    const user = useObject(User, email);
 
-    // const realm = useRealm()
-    // const MyObject = useObject(User, 1)
+    const {RealmProvider, useQuery, useRealm, useObject} = useRealmContext();
+    const user = useObject(User, getDataString('email'));
+   
+    const realm = useRealm()
 
     const app = useApp()
 
     const handleText = () => {
-            if(oldPassword && password && newPassword2){
+            
+            console.log(oldPassword !== blank)
+            console.log(newPassword1 !== blank)
+            console.log(newPassword2 !== blank)
+
+            if(oldPassword !== blank && newPassword1 !== blank && newPassword2 !== blank){
                 setIsWriting(true)
+            } else{
+                setIsWriting(false)
             }
     }  
 
@@ -33,9 +41,8 @@ const ChangePasswordChange = ({route, navigation}) => {
         try{
             if(user){
 
-            if(password == newPassword2 && password == user.userpassword ){
-                await app.emailPasswordAuth.callResetPasswordFunction({email, password}).then((msg) => {
-                    console.log(msg)
+            if(newPassword1 == newPassword2 && newPassword1 == user.userpassword ){
+                await app.emailPasswordAuth.callResetPasswordFunction({email, newPassword1}).then((msg) => {
                 })
             }}
         }
@@ -48,23 +55,21 @@ const ChangePasswordChange = ({route, navigation}) => {
  
     }
 
+    
+
 
 
     return  (
-    <SafeAreaView style={[styles.pageProfile, {backgroundColor: isDarkModeOn ? 'black' : '#f2f2f6'}]}>
+        <SafeAreaView style={[styles.pageProfile, {backgroundColor: isDarkModeOn ? 'black' : '#f2f2f6'}]}>
         
         <Header 
-        onPress={() => {
-            navigation.goBack()
-        }} title={'Change Password'} color={1}  
-        isOnChange={true}
-        isWriting={isWriting}
-        onPress2={() => {changePassword()}}
-        />
-        {/* <HeaderButtonRight
-        isDarkModeOn={isDarkModeOn} 
-        onPress={isWriting ? () => {handleText('txt', 2)} : () => {}}
-        isWriting={isWriting} /> */}
+                onPress={() => {
+                    navigation.goBack();
+                } } title={'Change Password'} color={1}
+                isOnChange={true}
+                mode={'pwc'}
+                isWriting={isWriting}
+                onPress2={() => { changePassword(); } } isSubtle={undefined} opacity={undefined} isBorderOk={undefined} isSheetOn={undefined} isDarkModeOn={undefined} isOnTask={undefined} isAddOn={undefined} isAddOn0={undefined}        />
         <ScrollView>
 
             <AppleInput onChangeText={(txt) => {setOldPassword(txt); handleText()}} isSecure={true} txt={'Old Password'}/>

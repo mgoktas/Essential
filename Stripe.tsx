@@ -58,7 +58,6 @@ function PaymentScreen() {
         // handle error
         } else {
         Alert.alert('Success', 'Check the logs for payment intent details.');
-        console.log(JSON.stringify(paymentIntent, null, 2));
         }
     };
 

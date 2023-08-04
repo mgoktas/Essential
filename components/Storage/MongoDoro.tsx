@@ -26,7 +26,7 @@ export class Doro extends Realm.Object<Doro> {
   };
 }
 
-export const realmConfig: Realm.Configuration = {
+const realmConfig: Realm.Configuration = {
   schema: [Doro],
   schemaVersion: 1,
 };
@@ -34,7 +34,7 @@ export const realmConfig: Realm.Configuration = {
 const {RealmProvider, useRealm, useObject, useQuery} = 
 createRealmContext(realmConfig);
 
-export const DoroRealmContext = createRealmContext({
+ const DoroRealmContext = createRealmContext({
   schema: [Doro],
   schemaVersion: 1
 });
