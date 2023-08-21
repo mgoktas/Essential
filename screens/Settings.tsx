@@ -52,6 +52,7 @@ import {
   urlAppWeb,
   urlSite,
   urlSiteSupport,
+  urlSiteWillDoro
 } from '../components/Storage/Data';
 // import { User, UserRealmContext } from '../components/Storage/MongoDB';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -71,8 +72,6 @@ import {useFocusEffect} from '@react-navigation/native';
 import {User, useRealmContext} from '../components/Storage/MongoDB';
 
 const Settings = ({route, navigation}) => {
-  const {isLogged} = route.params;
-
   const [isLog, setIsLog] = useState(getDataString('isLogged') === 'true');
   const [isSheetOn, setIsSheetOn] = useState(false);
 
@@ -103,14 +102,14 @@ const Settings = ({route, navigation}) => {
   );
   const [name, setName] = useState(getDataString('name'));
 
-  const {RealmProvider, useQuery, useRealm, useObject} = useRealmContext();
+  // const {RealmProvider, useQuery, useRealm, useObject} = useRealmContext();
 
-  const user =
-    getDataString('isLogged') === 'true'
-      ? useObject(User, getDataString('email'))
-      : ' ';
+  // const user =
+  //   getDataString('isLogged') === 'true'
+  //     ? useObject(User, getDataString('email'))
+  //     : ' ';
 
-  const realm = useRealm();
+  // const realm = useRealm();
 
   const user2 = useUser();
   const mongodb = user2.mongoClient('mongodb-atlas');
@@ -420,7 +419,11 @@ const Settings = ({route, navigation}) => {
           isDarkModeOn={isDarkModeOn}
           isFirst={true}
           onPress={() => {
-            navigation.navigate('Tasks', {isDarkModeOn});
+            navigation.navigate('Tasks', {
+              isDarkModeOn,
+              email: getDataString('email'),
+              isLog,
+            });
           }}
           title={'Tasks'}
           iconArrow={'angle-right'}
@@ -763,7 +766,7 @@ const Settings = ({route, navigation}) => {
           isLast={true}
           title={'Official Website'}
           onPress={() => {
-            goTo('https://resetwill.netlify.app/supportWillDoro.html');
+            goTo(urlSiteWillDoro);
           }}
           isPremium={undefined}
           isProfile={undefined}

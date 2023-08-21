@@ -7,6 +7,7 @@ export const examples = [
     {name: 'Musicdoro', index: 6, source : require('../components/images/music.jpg')},
     {name: 'Freedoro', index: 7, source : require('../components/images/free.jpg')},
     {name: 'Restdoro', index: 8, source : require('../components/images/rest.jpg')},
+    {name: 'break', index: 9, source : require('../components/images/rest2.jpg')},
 ]
  
 export const songs = [
@@ -32,6 +33,8 @@ export const track1 = {
 export const urlSite = 'https://qrtally.netlify.app'
 
 export const urlSiteSupport = 'https://qrtally.netlify.app/support.html'
+
+export const urlSiteWillDoro = 'https://qrtally.netlify.app/willdoro.html'
 
 export const urlAppStore = 'itms-apps://apps.apple.com/us/app/how-much-days/id6447752303';
 

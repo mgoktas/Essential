@@ -162,9 +162,9 @@ export const Space = ({space, isDate}) => (
     </View>
 );
 
-export const ProfileRow = ({onPress, txt, opacity, avatar, isDarkModeOn}) => {
+export const ProfileRow = ({onPress, txt, opacity, avatar, isDarkModeOn, isPremium}) => {
     return (
-        <TouchableOpacity style={[styles.profileCnt, {backgroundColor: isDarkModeOn ? '#1c1c1e' : 'white'}]} onPress={onPress} activeOpacity={1}>
+        <TouchableOpacity style={[styles.profileCnt, {backgroundColor: isDarkModeOn ? '#1c1c1e' : 'white',}]} onPress={onPress} activeOpacity={1}>
             <View style={{flexDirection: 'row'}}>
                 <View style={styles.avatarCnt}>
                     <View style={[styles.avatar, {backgroundColor: avatar}]}>

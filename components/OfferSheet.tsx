@@ -9,10 +9,11 @@ import { horizontalScale, verticalScale, moderateScale, verticalScaleAnti } from
 import { useFocusEffect } from '@react-navigation/native';
 import { SheetTitle, BackButton, FeaturesBox, SubsBox, AppleButton, BottomTexts, TextButtonSh, ButtonWSheet } from './Utilities/Utilities3';
 import { LineBwCell, Space, TaskCnt, TaskCntCnt, WhatDay } from './Utilities/Utilities';
-import { privacypolicy, termsofservice } from './Storage/Data';
+import { getDataString, privacypolicy, termsofservice } from './Storage/Data';
 import { FlashList } from '@shopify/flash-list';
 import { Task, useRealmContext,  } from './Storage/MongoDB';
 import { dates, getDate } from './Data';
+import { useQuery, useUser } from '@realm/react';
 const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window')
 
 export type OfferSheetRefProps = {
@@ -45,7 +46,7 @@ export const OfferSheet = React.forwardRef<OfferSheetRefProps, BottomSheetProps>
   .onStart(() => {
     context.value = { y: translateY.value }
   })
-  .onUpdate((event) => {
+  .onUpdate(() => {
     // translateY.value = event.translationY + context.value.y
     // translateY.value = Math.max(translateY.value, - MAX_TRANSLATE_Y)
   })
@@ -58,8 +59,6 @@ export const OfferSheet = React.forwardRef<OfferSheetRefProps, BottomSheetProps>
   })
   
   const initialValue = '';
-  const reference = useRef(initialValue);
-  const reference2 = useRef(initialValue);
 
   const rBottomSheetStyle = useAnimatedStyle(() => {
     const borderRadius = interpolate(
@@ -86,14 +85,6 @@ export const OfferSheet = React.forwardRef<OfferSheetRefProps, BottomSheetProps>
     }, [])
 
 
-    const measureView = (event) => {
-      // setState({
-      //         x: event.nativeEvent.layout.x,
-      //         y: event.nativeEvent.layout.y,
-      //         width: event.nativeEvent.layout.width,
-      //         height: event.nativeEvent.layout.height
-      //     })
-      }
     
       
 
@@ -148,7 +139,7 @@ export const ButtonSheet = React.forwardRef<OfferSheetRefProps, BottomSheetProps
   .onStart(() => {
     context.value = { y: translateY.value }
   })
-  .onUpdate((event) => {
+  .onUpdate(() => {
     // translateY.value = event.translationY + context.value.y
     // translateY.value = Math.max(translateY.value, - MAX_TRANSLATE_Y)
   })
@@ -161,8 +152,6 @@ export const ButtonSheet = React.forwardRef<OfferSheetRefProps, BottomSheetProps
   })
   
   const initialValue = '';
-  const reference = useRef(initialValue);
-  const reference2 = useRef(initialValue);
   
     const rBottomSheetStyle = useAnimatedStyle(() => {
       const borderRadius = interpolate(
@@ -201,21 +190,11 @@ export const ButtonSheet = React.forwardRef<OfferSheetRefProps, BottomSheetProps
       const launchCamera = async () => {
     
             await ImagePicker.launchCamera(optionsCamera,
-            (response) => {
+            () => {
             },
           )
   }
 
-  const optionsLibrary = {
-
-
-    storageOptions: {
-    skipBackup: true,
-    path: 'images',
-
-  },
-
-};
 
     const launchLibrary = async () => {
   
@@ -225,7 +204,7 @@ export const ButtonSheet = React.forwardRef<OfferSheetRefProps, BottomSheetProps
         maxHeight: 200,
         maxWidth: 200,
       },
-      (response) => {
+      () => {
         
       },
     )
@@ -280,7 +259,7 @@ const gesture = Gesture.Pan()
 .onStart(() => {
   context.value = { y: translateY.value }
 })
-.onUpdate((event) => {
+.onUpdate(() => {
   // translateY.value = event.translationY + context.value.y
   // translateY.value = Math.max(translateY.value, - MAX_TRANSLATE_Y)
 })
@@ -293,8 +272,6 @@ const gesture = Gesture.Pan()
 })
 
 const initialValue = '';
-const reference = useRef(initialValue);
-const reference2 = useRef(initialValue);
 
   const rBottomSheetStyle = useAnimatedStyle(() => {
     const borderRadius = interpolate(
@@ -322,14 +299,14 @@ const reference2 = useRef(initialValue);
       }
     }
     
-
+ 
 return (
       <GestureHandlerRootView>
         <GestureDetector gesture={gesture}>
           <Animated.View style={[styles.confirmSheet, rBottomSheetStyle, {backgroundColor: props.isDarkModeOn ? '#1c1c1e' : 'white'}]}>
             <View style={{justifyContent: 'center', flexDirection: 'column'}}>
             <Space space={5}/>
-            <ButtonWSheet isDarkModeOn={props.isDarkModeOn} onPress1={() => {scrollTo(100); props.closeSheet2()}} onPress2={() => {scrollTo(100); props.closeSheet2(); logOrDelete(props.logordelete)}} btn1={'Cancel'} btn2={props.logordelete == 0 ? 'Sign Out' : props.logordelete == 2 ? 'Delete Task' :  'Delete Account'} />
+            <ButtonWSheet isDarkModeOn={props.isDarkModeOn} onPress1={() => {scrollTo(100); props.closeSheet2()}} onPress2={() => {scrollTo(100); props.closeSheet2(); logOrDelete(props.logordelete); props.deleteTask()}} btn1={'Cancel'} btn2={props.logordelete == 0 ? 'Sign Out' : props.logordelete == 2 ? 'Delete Task' :  'Delete Account'} />
             </View>
           </Animated.View>
         </GestureDetector>
@@ -339,6 +316,7 @@ return (
 
 export type   TasksSheetRefProps = {
   scrollTo: (destination: number)=> void
+  reset: ()=> void
 }
 
 interface ChildPropsFocusSheet {
@@ -346,39 +324,44 @@ interface ChildPropsFocusSheet {
   isDarkModeOn: boolean
   clickedToPlay: Function
   setStartedWriting: Function
+  isLog: boolean
+  email: string
 }
 
 export const TasksSheet = React.forwardRef<TasksSheetRefProps>( (props: ChildPropsFocusSheet, ref2) => {
 
   const translateY = useSharedValue(0)
   const MAX_TRANSLATE_Y = SCREEN_HEIGHT / 1.2
-  
-  const {RealmProvider, useQuery, useRealm} = useRealmContext();
-  
+    
   const [isDate, setIsDate] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [items, setItems] = useState([])
-  const allTasks = useQuery(Task)
-  const realm = useRealm()
-  const savedTasks = allTasks.filtered('isForFuture == true')
   const [isActiveSub1, setIsActiveSub1] = useState(true)
   const [isActiveSub2, setIsActiveSub2] = useState(false)
   const [choosingTask, setCoosingTask] = useState(true)
   const [currentDate, setCurrentDate] = useState(dates[0].name)
-  
+  const [isLog, setIsLog] = useState(getDataString('isLogged') === 'true')
+
+
   const scrollTo = useCallback((destination: number) => {
     'worklet';
     translateY.value = withSpring(destination, { damping: 10000 })
   }, [])
   
-  useImperativeHandle(ref2, () => ({ scrollTo }), [scrollTo])
+  const reset = () => {
+    console.log('asfas')
+    setCurrentDate('Today')
+    isLog ? getTasksApp('Today') : getTasksRealm('Today')
+  }
+  
+  useImperativeHandle(ref2, () => ({ scrollTo, reset }), [scrollTo, reset])
   
   const context = useSharedValue({ y: 0 })
   const gesture = Gesture.Pan()
   .onStart(() => {
     context.value = { y: translateY.value }
   })
-  .onUpdate((event) => {
+  .onUpdate(() => {
     // translateY.value = event.translationY + context.value.y
     // translateY.value = Math.max(translateY.value, - MAX_TRANSLATE_Y)
   })
@@ -391,16 +374,16 @@ export const TasksSheet = React.forwardRef<TasksSheetRefProps>( (props: ChildPro
   })
 
   useEffect(() => {
-    const getTaskss = async () => {
-        await getTasks()
-     };
-     getTasks(currentDate)
-     getTaskss()
+    const getTasksAsync = async () => {
+      
+      isLog ? getTasksApp(currentDate) : getTasksRealm(currentDate)
+     
+      };
+      isLog ? getTasksApp(currentDate) : getTasksRealm(currentDate)     
+      getTasksAsync()
     }, [])
 
   const initialValue = '';
-  const reference = useRef(initialValue);
-  const reference2 = useRef(initialValue);
   
     const rBottomSheetStyle = useAnimatedStyle(() => {
       const borderRadius = interpolate(
@@ -424,73 +407,63 @@ export const TasksSheet = React.forwardRef<TasksSheetRefProps>( (props: ChildPro
       scrollTo(1000)
     },[])
 
-    const getTasks = async (date) => {
-      const savedTasks = allTasks.filtered('isForFuture == true')
-      savedTasks.map((item) => {
+    const user = useUser();
+    
+    const getTasksApp = async (date) => {
+    
+    console.log('app')
+      
+      const mongodb = user.mongoClient('mongodb-atlas');
+      const alltasks = mongodb.db('reactapp').collection<Task>('tasks');
+      const tasksForFuture = alltasks.find({isForFuture: 'true', createdBy: props.email})
+      ;(await tasksForFuture).map((item) => {
 
         if(getDate(item.startDate) == date) {
           setItems(arr => [...arr, {id: arr.length + 1, _id: item._id, name: item.taskName, date: getDate(item.startDate), didFinish: item.didFinish}])
           if(item){
               setIsLoading(false)
           }
-        } else if (containsNumbers(getDate(item.startDate)) && currentDate == 'Planned'){
+        } else if (containsNumbers(getDate(item.startDate)) && date == 'Planned'){
           setItems(arr => [...arr, {id: arr.length + 1, _id: item._id, name: item.taskName, date: getDate(item.startDate), didFinish: item.didFinish}])
         }
-  })
-      
 
-      
+        })
+  
+    }
+
+    const realmTasks = useQuery(Task)
+
+    const getTasksRealm = async (date) => {
+
+      setItems([])
+
+      console.log('realm')
+
+      const tasksForFuture = realmTasks.filtered('isForFuture == true')
+    
+      tasksForFuture.map((item) => {
+
+        console.log(getDate(item.startDate), date)
+
+        if(getDate(item.startDate) == date) {
+          setItems(arr => [...arr, {id: arr.length + 1, _id: item._id, name: item.taskName, date: getDate(item.startDate), didFinish: item.didFinish}])
+          if(item){
+              setIsLoading(false)
+          }
+        } else if (containsNumbers(getDate(item.startDate)) && date == 'Planned'){
+          setItems(arr => [...arr, {id: arr.length + 1, _id: item._id, name: item.taskName, date: getDate(item.startDate), didFinish: item.didFinish}])
+        }
+
+
+
+
+  })
+
 
     }
 
-    // const getDate = (date: Date) => {
-    //   const today = new Date();
-
-    //   const today2 = new Date();
-    //   today2.setDate(today.getDate() + 1)
-    //   today2.setHours(0,0,0,0)
-
-    //   const tomorrow = new Date(today)
-    //   tomorrow.setDate(today.getDate() + 2)
-    //   tomorrow.setHours(0,0,0,0)
-      
-      
-    //   const firstDay = new Date(today.setDate(today.getDate() - today.getDay()));
-    //   const lastDay = new Date(today.setDate(today.getDate() - today.getDay() + 6));
-
-    //   const dayName = date.toLocaleString('default', { month: 'long' })
-      
-
-    //   if((today.getDay() + today.getMonth()) == date.getDay() + 1 + date.getMonth()){
-    //       return 'Today'
-    //   }
-
-    //   else if(today2.getTime() < date.getTime() && date.getTime() < tomorrow.getTime()){
-
-    //       return 'Tomorrow'
-
-    //   }
-
-    //   else if(firstDay.getTime() <= date.getTime() && date.getTime() <= lastDay.getTime() ){
-
-
-    //       return 'This Week'
-
-    //   }
-
-    //   else if(date.getTime() > today.getTime()) {
-          
-
-    //       return dayName + ' ' + date.getDate()
-          
-      
-    //   }
-      
-    // }
     
-   
-    
-    const renderItem = ({ item, index }, onClick) => {
+    const renderItem = ({ item, index }) => {
 
           return (
 
@@ -514,17 +487,17 @@ export const TasksSheet = React.forwardRef<TasksSheetRefProps>( (props: ChildPro
           );
     };
         
-    const renderItem2 = ({ item, index }, onClick) => {
+    const renderItem2 = ({ item, index }) => {
         
       return (
         index !== 3 ? 
             <View>
-              <TaskCnt isSelected={item.name == currentDate ? true : false} coosingTask={choosingTask} onPress={() => { setTimeout(function() { flatlistRef.current.scrollToIndex({ index: 0, animated: true }); },400); setCurrentDate(item.name); setCoosingTask(true); setItems([]); getTasks(item.name); }}isDate={true} title={item.name} />
+              <TaskCnt isSelected={item.name == currentDate ? true : false} coosingTask={choosingTask} onPress={() => { setCurrentDate(item.name); setCoosingTask(true); setItems([]); isLog ? getTasksApp(item.name) : getTasksRealm(item.name); setTimeout(function() { flatlistRef.current.scrollToIndex({ index: 0, animated: true }); },1000); }} isDate={true} title={item.name} />
               <LineBwCell  isOnTask={true} isDarkModeOn={false} isFull={true} />
             </View>
 :
           <View>
-          <TaskCnt isSelected={item.name == currentDate ? true : false} coosingTask={choosingTask} onPress={() => {  setCurrentDate(item.name); setCoosingTask(true); setItems([]); getTasks(item.name); setTimeout(function() { flatlistRef.current.scrollToIndex({ index: 0, animated: true }); },200);}} isDate={true} title={item.name} />
+          <TaskCnt isSelected={item.name == currentDate ? true : false} coosingTask={choosingTask} onPress={() => {  setCurrentDate(item.name); setCoosingTask(true); setItems([]); isLog ? getTasksApp(item.name) : getTasksRealm(item.name); setTimeout(function() { flatlistRef.current.scrollToIndex({ index: 0, animated: true }); },200);}} isDate={true} title={item.name} />
           </View>
         );
 
@@ -550,7 +523,7 @@ export const TasksSheet = React.forwardRef<TasksSheetRefProps>( (props: ChildPro
 
     const twoLists = [1,2]
 
-    const renderItems = ({ item, index }) => {
+    const renderItems = ({ index }) => {
 
 
       if(index == 0) {
@@ -579,7 +552,10 @@ export const TasksSheet = React.forwardRef<TasksSheetRefProps>( (props: ChildPro
               <View style={{justifyContent: 'center', flexDirection: 'column', opacity: 20, zIndex: 20}}>
               {/* <BackButton onPress={() => {scrollTo(60)}} /> */}
               <Space isDate={isDate} space={6}/>
-              <WhatDay onPressPlus={() => {scrollTo(100); props.setStartedWriting()}} coosingTask={choosingTask} date={currentDate} onPressDate={() => {setCoosingTask(false); flatlistRef.current.scrollToIndex({ index: 1, animated: true })}} onPressBack={() => {if(choosingTask){scrollTo(100)} else {flatlistRef.current.scrollToIndex({ index: 0, animated: true }); setCoosingTask(true); setItems([]); getTasks()}}} isDate={isDate} />
+              <WhatDay 
+              onPressPlus={() => {scrollTo(100); props.setStartedWriting()}} coosingTask={choosingTask} date={currentDate} 
+              onPressDate={() => {setCoosingTask(false); flatlistRef.current.scrollToIndex({ index: 1, animated: true })}} 
+              onPressBack={() => {if(choosingTask){scrollTo(100)} else {flatlistRef.current.scrollToIndex({ index: 0, animated: true }); setCoosingTask(true); setItems([]); isLog ? getTasksApp(currentDate) : getTasksRealm(currentDate)}}} isDate={isDate} />
             <View style={{height: SCREEN_HEIGHT/2, width: SCREEN_WIDTH}}>
               <FlashList estimatedItemSize={306} ref={flatlistRef}  pagingEnabled={true} data={twoLists} renderItem={renderItems} horizontal={true} keyExtractor={(item) => item} extraData={`${items.length}`} showsHorizontalScrollIndicator={false}>
               </FlashList>

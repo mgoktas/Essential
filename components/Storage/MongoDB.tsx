@@ -8,7 +8,7 @@ export class User extends Realm.Object<User> {
   userpassword!: string;
   username!: string;
   alarmWork: number = 1;
-  alarmBreak: number = 2; 
+  alarmBreak: number = 2;
   vibrate: string = 'false';
   pomodoroLength: number = 25;
   breakShortLength: number = 5;
@@ -16,12 +16,12 @@ export class User extends Realm.Object<User> {
   breakAfterLongLength: number = 4;
   autoNext: string = 'false';
   autoBreak: string = 'false';
-  darkMode: string = 'false'; 
+  darkMode: string = 'false';
   dailyReminder: string = 'false';
   defaultDoroInt: number = 1;
   defaultDoroStr: string = 'Monkdoro';
   isPremium: string = 'false';
-  
+
   static schema = {
     name: 'User',
     properties: {
@@ -71,21 +71,23 @@ export class Doro extends Realm.Object<Doro> {
       didFinish: {type: 'bool', default: false},
       didBreakEnd: {type: 'bool', default: false},
     },
-    primaryKey: '_id'
-}}
+    primaryKey: '_id',
+  };
+}
 
 export class Task extends Realm.Object<Doro> {
   _id!: string;
   name!: string;
   taskName!: string;
   startDate!: Date;
-  startTime!: Date;
-  endTime!: Date;
+  // startTime!: Date;
+  // endTime!: Date;
   length!: number;
-  breakLength!: number;
+  // breakLength!: number;
   didFinish: boolean = false;
-  sessionLength!: number 
+  // sessionLength!: number;
   isForFuture: boolean = false;
+  createdBy!: string;
 
   static schema = {
     name: 'Task',
@@ -93,23 +95,25 @@ export class Task extends Realm.Object<Doro> {
       _id: 'string',
       taskName: 'string',
       startDate: 'date',
-      startTime: 'date',
-      endTime: 'date',
+      // startTime: 'date',
+      // endTime: 'date',
       length: 'int',
-      sessionLength: 'int',
-      breakLength: 'int',
+      // sessionLength: 'int',
+      // breakLength: 'int',
       didFinish: {  type: 'bool', default: false  },
       isForFuture: {  type: 'bool', default: false  },
+      createdBy: 'string',
     },
-    primaryKey: '_id'
-}}
+    primaryKey: '_id',
+  };
+}
 
 export const realmUserConfig: Realm.Configuration = {
   schema: [User, Doro, Task],
-  schemaVersion: 15
+  schemaVersion: 18,
 };
 
-// export const {RealmProvider, useRealm, useObject, useQuery} = 
+// export const {RealmProvider, useRealm, useObject, useQuery} =
 // createRealmContext(realmUserConfig);
 
 //  const UserRealmContext = createRealmContext({
@@ -118,5 +122,8 @@ export const realmUserConfig: Realm.Configuration = {
 // })
 
 const realmContext = createRealmContext(realmUserConfig);
+
+export const {RealmProvider, useRealm, useObject, useQuery} =
+  createRealmContext(realmUserConfig);
 
 export const useRealmContext = () => realmContext;

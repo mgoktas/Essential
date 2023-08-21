@@ -50,6 +50,7 @@ import {
   useRealmContext,
   realmUserConfig,
   User,
+  Task,
 } from './components/Storage/MongoDB';
 import {LogBox} from 'react-native';
 import ChangeName from './screens/Settings/Profile/ChangeName';
@@ -91,8 +92,8 @@ function App(): JSX.Element {
     }
   }, []);
 
+  LogBox.ignoreAllLogs();
 
-  const {RealmProvider} = useRealmContext();
 
   // const find = async () => {
   //   const venusFlytrap = await plants.findOne({name: 'venus flytrap'});
@@ -105,7 +106,7 @@ function App(): JSX.Element {
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
         <AppProvider id={'willdoro-xhauo'}>
       <UserProvider>
-          <RealmProvider {...realmUserConfig}>
+          <RealmProvider {...realmUserConfig} schema={[Task]}>
             <Stack.Navigator
               initialRouteName="Focus"
               screenOptions={{headerShown: false}}>
