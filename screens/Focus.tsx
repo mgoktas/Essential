@@ -27,7 +27,6 @@ import {
 } from '../components/Functions/Functions';
 import {
   examples,
-  getData,
   getDataNumber,
   getDataString,
   setData,
@@ -63,7 +62,6 @@ const Focus = ({navigation}) => {
   const [alarmWork, setAlarmWork] = useState(getDataNumber('alarmWork'));
   const [alarmBreak, setAlarmBreak] = useState(getDataNumber('alarmBreak'));
   const [defaultDoroInt, setDefaultDoroInt] = useState(getDataNumber('defaultDoroInt'))
-  const [defaultDoroStr, setDefaultDoroStr] = useState(getDataString('defaultDoroStr'))
   const [longSession, setLongSession] = useState();
   const [hasTaskSessionEnded, setHasTaskSessionEnded] = useState(false);
   const [isChoosingTheTask, setIsChoosingTheTask] = useState(false);
@@ -144,21 +142,26 @@ const Focus = ({navigation}) => {
       if (hasStarted) {
         if (breakAfterLongLength == 0 && remainingSecs == 0 && isTaskModeOn) {
           taskSessionEnd();
+          setDefaultDoroInt(getDataNumber('defaultDoroInt'))
           return;
         } else if (isBreakOn && remainingSecs == 0 && isTaskModeOn) {
           endTaskBreak();
           vibrateFor(isVibrate, 2);
+          setDefaultDoroInt(getDataNumber('defaultDoroInt'))
         } else if (isBreakOn && remainingSecs == 0) {
           endBreak();
           newDoro();
           vibrateFor(isVibrate, 2);
-        } else if (remainingSecs == 0 && isTaskModeOn) {
+          setDefaultDoroInt(getDataNumber('defaultDoroInt'))
+  } else if (remainingSecs == 0 && isTaskModeOn) {
           endTaskSession();
           vibrateFor(isVibrate, 5);
+          setDefaultDoroInt(8)
         } else if (hasStarted && remainingSecs == 0) {
           endSession();
           console.log('session ended')
           vibrateFor(isVibrate, 5);
+          setDefaultDoroInt(8)
         }
   
         interval = setInterval(() => {
@@ -184,6 +187,7 @@ const Focus = ({navigation}) => {
     setIsChoosingTheTask(false);
     setTaskChosen(false);
     setIsWritingTaskInput(false);
+    setDefaultDoroInt(getDataNumber('defaultDoroInt'))
     setTaskName('');
     // setIsTaskModeOn(true)
     setIsDoroModeOn(false);
@@ -211,6 +215,7 @@ const Focus = ({navigation}) => {
     setAutoNext(getDataString('darkMode') === 'true')
     setAutoBreak(getDataString('autoBreak') === 'true')
     setAutoNext(getDataString('autoNext') === 'true')
+    setDefaultDoroInt(getDataNumber('defaultDoroInt'))
 
     setIsLoading(false)
   }
@@ -434,7 +439,7 @@ const Focus = ({navigation}) => {
 
   return (
 
-    isTaskModeOn  ?
+    isTaskModeOn && !isLoading  ?
 
       <SafeAreaView style={[styles.pageFocus]}>
         <CaretIcon
@@ -460,7 +465,7 @@ const Focus = ({navigation}) => {
         />
         <ImageBackground
           style={styles.pageFocusImage}
-          source={examples[3].source}
+          source={examples[defaultDoroInt].source}
           >
           <SessionsLeft
             hasTaskSessionEnded={hasTaskSessionEnded}
@@ -585,7 +590,8 @@ const Focus = ({navigation}) => {
         />
         <ImageBackground
           style={styles.pageFocusImage}
-          source={examples[3].source}>
+          source={examples[defaultDoroInt].source}
+          >
           <FocusSlide
             hide={true}
             // subMin={() => {if(remainingSecs>500) { setRemainingSecs(remainingSecs - 300); setCount2(count2-300)}}}

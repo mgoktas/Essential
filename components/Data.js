@@ -7,7 +7,18 @@ export const examples = [
     {name: 'Musicdoro', index: 6, source : require('../components/images/music.jpg')},
     {name: 'Freedoro', index: 7, source : require('../components/images/free.jpg')},
     {name: 'Restdoro', index: 8, source : require('../components/images/rest.jpg')},
-    {name: 'break', index: 9, source : require('../components/images/rest2.jpg')},
+]
+
+export const examplesDark = [
+    {name: 'Monkdoro', index: 1, source : require('../components/images/dark/monk.jpg')},
+    {name: 'Classicdoro', index: 2, source : require('../components/images/dark/classic.jpg')},
+    {name: 'Animedoro', index: 3, source : require('../components/images/dark/anime.jpg')},
+    {name: 'Moviedoro', index: 4, source : require('../components/images/dark/movie.jpg')},
+    {name: 'Showdoro', index: 5, source : require('../components/images/dark/show.jpg')},
+    {name: 'Musicdoro', index: 6, source : require('../components/images/dark/music.jpg')},
+    {name: 'Freedoro', index: 7, source : require('../components/images/dark/free.jpg')},
+    {name: 'Restdoro', index: 8, source : require('../components/images/dark/rest.jpg')},
+    {name: 'break', index: 9, source : require('../components/images/dark/study.jpg')},
 ]
  
 export const songs = [

@@ -15,7 +15,8 @@ import { User } from '../../components/Storage/MongoDB';
 
 const Signup = ({route, navigation}) => {
   const {_dark} = route.params;
-  const isDarkModeOn = useState(_dark);
+
+  console.log(_dark)
 
   const [name, setName] = useState('Muhammet Rasit');
   const [email, setEmail] = useState('ahmettalha@gmail.com');
@@ -69,7 +70,7 @@ const Signup = ({route, navigation}) => {
   
       console.log(result);
   
-      await navigation.navigate('Sign', {_dark: isDarkModeOn});
+      await navigation.navigate('Sign', {_dark: _dark});
     } catch (err) {
       console.log('Security Error', err);
     }
@@ -148,10 +149,10 @@ const Signup = ({route, navigation}) => {
     <SafeAreaView
       style={[
         styles.pageSign,
-        {backgroundColor: isDarkModeOn ? '#1c1c1e' : '#f2f2f6'},
+        {backgroundColor: _dark ? '#1c1c1e' : '#f2f2f6'},
       ]}>
       <Header
-        isDarkModeOn={isDarkModeOn}
+        _dark={_dark}
         onPress={() => {
           navigation.goBack();
         }}
@@ -172,7 +173,7 @@ const Signup = ({route, navigation}) => {
       <Space space={24} isDate={undefined} />
 
       <Input
-        isDarkModeOn={isDarkModeOn}
+        _dark={_dark}
         autoCap={'words'}
         icon={'person'}
         placeholder={'Name'}
@@ -182,7 +183,7 @@ const Signup = ({route, navigation}) => {
       <Space space={12} isDate={undefined} />
 
       <Input
-        isDarkModeOn={isDarkModeOn}
+        _dark={_dark}
         autoCap={'none'}
         icon={'mail'}
         placeholder={'Email Address'}
@@ -192,7 +193,7 @@ const Signup = ({route, navigation}) => {
       <Space space={12} isDate={undefined} />
 
       <Input
-        isDarkModeOn={isDarkModeOn}
+        _dark={_dark}
         icon={'lock-closed'}
         placeholder={'Password'}
         isPassword={true}
@@ -202,7 +203,7 @@ const Signup = ({route, navigation}) => {
       <Space space={12} isDate={undefined} />
 
       <Input
-        isDarkModeOn={isDarkModeOn}
+        _dark={_dark}
         icon={'lock-closed'}
         placeholder={'Password Again'}
         isPassword={true}
@@ -217,7 +218,7 @@ const Signup = ({route, navigation}) => {
           navigation.goBack();
         }}
         txt={'Already registered?'}
-        isDarkModeOn={undefined}
+        _dark={undefined}
       />
 
       <AppleButton
@@ -230,13 +231,13 @@ const Signup = ({route, navigation}) => {
             navigation,
             app,
             user,
-            isDarkModeOn,
+            _dark,
           );
         }}
         txt={'Sign Up'}
         isPrimary={true}
         color={'#007AFF'}
-        isDarkModeOn={undefined}
+        _dark={undefined}
         isOnTask={undefined}
         mode={undefined}
       />
@@ -247,7 +248,7 @@ const Signup = ({route, navigation}) => {
           navigation.goBack();
         }}
         txt={'or?'}
-        isDarkModeOn={undefined}
+        _dark={undefined}
       />
 
       <AppleButton
@@ -257,7 +258,7 @@ const Signup = ({route, navigation}) => {
         txt={'Sign with Facebook'}
         isPrimary={false}
         color={'#007AFF'}
-        isDarkModeOn={undefined}
+        _dark={undefined}
         isOnTask={undefined}
         mode={undefined}
       />
@@ -269,7 +270,7 @@ const Signup = ({route, navigation}) => {
         txt={'Sign with Google'}
         isPrimary={false}
         color={'#007AFF'}
-        isDarkModeOn={undefined}
+        _dark={undefined}
         isOnTask={undefined}
         mode={undefined}
       />

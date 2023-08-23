@@ -551,6 +551,8 @@ PODS:
     - React-Core
   - RNCPicker (2.4.10):
     - React-Core
+  - RNCPushNotificationIOS (1.11.0):
+    - React-Core
   - RNFlashList (1.4.3):
     - React-Core
   - RNGestureHandler (2.12.0):
@@ -711,6 +713,7 @@ DEPENDENCIES:
   - RealmJS (from `../node_modules/realm`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
+  - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
@@ -858,6 +861,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
+  RNCPushNotificationIOS:
+    :path: "../node_modules/@react-native-community/push-notification-ios"
   RNFlashList:
     :path: "../node_modules/@shopify/flash-list"
   RNGestureHandler:
@@ -953,6 +958,7 @@ SPEC CHECKSUMS:
   RevenueCat: cc588605c9852000693d8b94b7c2e79894ae9117
   RNCAsyncStorage: 4b98ac3c64efa4e35c1197cb0c5ca5e9f5d4c666
   RNCPicker: 0bc2f0a29abcca7b7ed44a2d036aac9ab6d25700
+  RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNFlashList: ade81b4e928ebd585dd492014d40fb8d0e848aab
   RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
   RNGoogleSignin: ccaa4a81582cf713eea562c5dd9dc1961a715fd0

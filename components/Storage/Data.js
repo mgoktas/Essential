@@ -12,8 +12,22 @@ export const examples = [
 ]
 
 export const examples2 = [
-    {name: 'Study', index: 9, source : require('../images/study/study.jpg')},
+    {name: 'Study', index: 1, source : require('../images/study/study.jpg')},
+    {name: 'Study2', index: 2, source : require('../images/dark/study/study.jpg')},
 ]
+
+export const examplesDark = [
+    {name: 'Monkdoro', index: 1, source : require('../images/dark/monk.jpg')},
+    {name: 'Classicdoro', index: 2, source : require('../images/dark/classic.jpg')},
+    {name: 'Animedoro', index: 3, source : require('../images/dark/anime.jpg')},
+    {name: 'Moviedoro', index: 4, source : require('../images/dark/movie.jpg')},
+    {name: 'Showdoro', index: 5, source : require('../images/dark/show.jpg')},
+    {name: 'Musicdoro', index: 6, source : require('../images/dark/music.jpg')},
+    {name: 'Freedoro', index: 7, source : require('../images/dark/free.jpg')},
+    {name: 'Restdoro', index: 8, source : require('../images/dark/rest.jpg')},
+    {name: 'break', index: 9, source : require('../images/dark/study.jpg')},
+]
+ 
  
 export const songs = [
     {id: 1, url: require('../voices/1.mp3')},
