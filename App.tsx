@@ -104,7 +104,7 @@ function App(): JSX.Element {
 
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
-        <AppProvider id={'willdoro-xhauo'}>
+        <AppProvider id={'<REALM-APP-ID>'}>
       <UserProvider>
           <RealmProvider {...realmUserConfig} schema={[Task]}>
             <Stack.Navigator
